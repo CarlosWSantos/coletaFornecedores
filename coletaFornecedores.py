@@ -1,10 +1,27 @@
-#BARRA DE CARREGAMENTO
+#CÓDIGO FINAL, GRAÇAS A DEUS!!!!!!!!!!!!!
 
 import os
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 from tqdm import tqdm  # Biblioteca para barra de progresso
+
+
+#Algumas considerações:
+#O formato de código HTML do site do "QuemFornece?" é extremamente ruim, não usa nenhum padrão para armazenar as informações
+#e deixa toda a criação de divs e tabelas nas mãos do PHP, isso dificultou muito a coleta de dados, pois poderia simplesmente
+#buscar uma div específica ou uma tabela específica ou até mesmo uma ID, mas todos esses dados está sendo processado pelo PHP
+#isso gera diversos problemas pois não dá pra deixar de maneira 100% automatica e eficaz para a coleta em todos os sites
+#ja que o código itera sobre URL's do código base HTML das páginas, então links que poderiam ser da empresa como exemplo:
+# ajudaaqui.com.br ou instagram.com/empresanomex poderiam ser ignorados, portanto, precisei fazer uma lista de sites que devem
+#ser ignorados para evitar problemas e acessos desnecessários.
+#outro problema é que proxys e acessos demasiados de servidor podem ocasionar no bloqueio de acesso, não tive esse problema
+#no QuemFornece? mas é possível que em outros sites esse problema ocorra. Sendo sincero, não sei como proceder se esse
+#problema acontecer.
+
+
+#AVISO!!!! O CÓDIGO É LENTO! MUITO LENTO! Esta é a minha primeira experiência utilizando Python com qualquer coisa 
+#relacionado a web, não sei como deixar esse processo mais rápido ainda.
 
 # Lista de URLs a serem evitadas (páginas desnecessárias)
 urls_ignoradas = [
@@ -62,7 +79,7 @@ def coletar_dados_fornecedor(url, exibir_logs):
                         addresses.append(text)
 
             links = soup.find_all("a")
-            exclude_keywords = ["whatsapp", "quemfornece", "facebook", "instagram.com/quemfornece", "linkedin"]
+            exclude_keywords = ["whatsapp", "quemfornece", "facebook;com/quemfornece", "instagram.com/quemfornece", "linkedin"]
             for link in links:
                 href = link.get("href", "")
                 if any(keyword in href for keyword in exclude_keywords):
